@@ -1,0 +1,36 @@
+name: Weekly DigitalOddities Showcase
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Run every Sunday at midnight UTC
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  showcase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Create weekly showcase
+        run: |
+          # This is a placeholder for generating the weekly showcase
+          # In a real implementation, this would:
+          # 1. Identify the current theme
+          # 2. Collect submissions for the week
+          # 3. Generate a showcase markdown file
+          # 4. Create a discussion post
+          echo "Generating weekly showcase..."
+          mkdir -p .github/workflows/temp
+          echo "# Weekly Showcase $(date +'%Y-%m-%d')" > .github/workflows/temp/showcase.md
+          echo "\n## Featured Artifacts" >> .github/workflows/temp/showcase.md
+          echo "\nThis is a placeholder for the weekly showcase." >> .github/workflows/temp/showcase.md
+
+      - name: Notify maintainers
+        run: |
+          echo "Weekly showcase generated. Notify maintainers to review and publish."

@@ -13,6 +13,12 @@ DigitalOddities is a community-driven GitHub repository dedicated to collecting,
 - **Open discussion**: Use GitHub Discussions for weekly topics, showcases, and community dialogue
 - **Shareable formats**: ASCII art, emoji, tables, and text-based visuals that spread easily
 
+## Current Theme
+
+Current Theme: #404 Relics
+
+Check back weekly for theme updates!
+
 ## How to Contribute
 
 ### 1. Choose a Theme

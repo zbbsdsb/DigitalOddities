@@ -17,20 +17,84 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyGithub
+
       - name: Create weekly showcase
         run: |
-          # This is a placeholder for generating the weekly showcase
-          # In a real implementation, this would:
-          # 1. Identify the current theme
-          # 2. Collect submissions for the week
-          # 3. Generate a showcase markdown file
-          # 4. Create a discussion post
-          echo "Generating weekly showcase..."
+          # Create showcase directory
           mkdir -p .github/workflows/temp
+          
+          # Define themes in order
+          themes=("404-relics" "pixel-anomalies" "cache-oracles" "table-hauntings" "ascii-summoning" "emoji-folklore" "future-collection" "algorithm-superstitions" "distorted-notices" "cloud-legends")
+          
+          # Calculate current theme based on week number
+          week_number=$(date +"%U")
+          theme_index=$((week_number % 10))
+          current_theme=${themes[$theme_index]}
+          
+          # Get next theme
+          next_theme_index=$(((week_number + 1) % 10))
+          next_theme=${themes[$next_theme_index]}
+          
+          # Generate showcase markdown
           echo "# Weekly Showcase $(date +'%Y-%m-%d')" > .github/workflows/temp/showcase.md
+          echo "\n## Current Theme: #${current_theme//-/ }" >> .github/workflows/temp/showcase.md
+          echo "\n## Next Week: #${next_theme//-/ }" >> .github/workflows/temp/showcase.md
           echo "\n## Featured Artifacts" >> .github/workflows/temp/showcase.md
-          echo "\nThis is a placeholder for the weekly showcase." >> .github/workflows/temp/showcase.md
+          
+          # Collect artifacts for current theme
+          if [ -d "exhibits/$current_theme" ]; then
+            echo "\n### Artifacts Submitted This Week:" >> .github/workflows/temp/showcase.md
+            artifact_count=0
+            for artifact in exhibits/$current_theme/*.md; do
+              if [ -f "$artifact" ]; then
+                artifact_count=$((artifact_count + 1))
+                # Extract title from file
+                title=$(grep "^# " "$artifact" | head -1 | sed 's/^# //')
+                # Extract artifact ID
+                artifact_id=$(grep "Artifact ID:" "$artifact" | head -1 | sed 's/Artifact ID: //')
+                # Extract status
+                status=$(grep "Status:" "$artifact" | head -1 | sed 's/Status: //')
+                # Add to showcase
+                echo "\n#### $title" >> .github/workflows/temp/showcase.md
+                echo "- ID: $artifact_id" >> .github/workflows/temp/showcase.md
+                echo "- Status: $status" >> .github/workflows/temp/showcase.md
+                echo "- [View Artifact]($artifact)" >> .github/workflows/temp/showcase.md
+              fi
+            done
+            
+            if [ $artifact_count -eq 0 ]; then
+              echo "\nNo artifacts submitted for this theme yet. Be the first to contribute!" >> .github/workflows/temp/showcase.md
+            fi
+          else
+            echo "\nTheme directory not found." >> .github/workflows/temp/showcase.md
+          fi
+          
+          # Add submission instructions
+          echo "\n## How to Contribute" >> .github/workflows/temp/showcase.md
+          echo "\n1. Choose this week's theme: #${current_theme//-/ }" >> .github/workflows/temp/showcase.md
+          echo "2. Create your artifact following the template" >> .github/workflows/temp/showcase.md
+          echo "3. Submit via Issue or Pull Request" >> .github/workflows/temp/showcase.md
+          echo "4. See your creation in next week's showcase!" >> .github/workflows/temp/showcase.md
+
+      - name: Update current theme in README
+        run: |
+          # Define themes in order
+          themes=("404-relics" "pixel-anomalies" "cache-oracles" "table-hauntings" "ascii-summoning" "emoji-folklore" "future-collection" "algorithm-superstitions" "distorted-notices" "cloud-legends")
+          
+          # Calculate current theme based on week number
+          week_number=$(date +"%U")
+          theme_index=$((week_number % 10))
+          current_theme=${themes[$theme_index]}
+          
+          # Update README with current theme
+          sed -i "s/\(Current Theme: \).*/\1#${current_theme//-/ }/g" README.md || echo "No current theme line found in README"
 
       - name: Notify maintainers
         run: |
-          echo "Weekly showcase generated. Notify maintainers to review and publish."
+          echo "Weekly showcase generated at .github/workflows/temp/showcase.md"
+          echo "Current theme: $(date +"%U") % 10 = $(( $(date +"%U") % 10 ))"
+          echo "Maintainers should review and publish the showcase as a Discussion post."

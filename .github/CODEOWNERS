@@ -1,0 +1,21 @@
+# Code Owners
+
+# This file defines code owners for the DigitalOddities project
+
+# Maintainers for the entire project
+*       @username
+
+# Theme-specific maintainers
+/exhibits/404-relics/         @username
+/exhibits/pixel-anomalies/     @username
+/exhibits/cache-oracles/       @username
+/exhibits/table-hauntings/     @username
+/exhibits/ascii-summoning/     @username
+/exhibits/emoji-folklore/      @username
+/exhibits/future-collection/   @username
+/exhibits/algorithm-superstitions/ @username
+/exhibits/distorted-notices/   @username
+/exhibits/cloud-legends/       @username
+
+# GitHub configuration
+/.github/                      @username

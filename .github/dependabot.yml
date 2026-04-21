@@ -1,0 +1,23 @@
+# Dependabot Configuration
+
+# Enable version updates for GitHub Actions
+updates:
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Labels for pull requests
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # Python dependencies (if any)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Labels for pull requests
+    labels:
+      - "dependencies"
+      - "python"
